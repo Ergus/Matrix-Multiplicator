@@ -16,13 +16,16 @@ extern "C"{
                 double*,double*,int*,
                         double*,int*,
                 double*,double*,int*);
+
+    void matmult1(double* __restrict__ a,
+                  double* __restrict__ b,
+                  double* __restrict__ c,
+                  const int dim);
     
-    void matmult1(double *a,double *b,double *c,const int dim);
     void matmult2(double *a,double *b,double *c,const int dim);
     void matmult3(double *a,double *b,double *c,const int dim);
     void matmult4(double *a,double *b,double *c,const int dim);
-
-    
+    void matmult5_(double *,double* ,double*,int* );    
     
     bool compare(double *a, double *b, const int dim);
 

@@ -1,23 +1,19 @@
 #include "matrix.h"
 
-void printmat(double *a, const int dim){
-    printf("\n ");    
-    for(int i=0;i<dim;++i){
-        printf("| ");
-        for(int j=0;j<dim;j++){
-            printf("%lf ",a[i*dim+j]);
-            }
-        printf("|\n ");
-        }
-    printf("\n ");
-    }
+void matmult1(double* __restrict__ a,
+              double* __restrict__ b,
+              double* __restrict__ c,
+              const int dim){
 
-void matmult1(double *a,double *b,double *c,const int dim){  
+    double temp;
+    
     for(int i=0;i<dim;++i){
-        for(int j=0;j<dim;j++){            
-            c[i*dim+j]=0.0;
+        const int idim=i*dim;
+        for(int j=0;j<dim;j++){
+            const int jdim=j*dim;
+            temp=a[idim+j];
             for(int k=0;k<dim;k++){
-                c[i*dim+j]+=(a[i*dim+k]*b[k*dim+j]);
+                c[idim+k]+=(temp*b[jdim+k]);
                 }
             }
         }
@@ -56,7 +52,6 @@ void matmult3(double *a,double *b,double *c, const int dim){
     }
 
 void matmult4(double *a,double *b,double *c, const int dim){
-
     char TransA[]={'N'};
     char TransB[]={'N'};
         
@@ -89,3 +84,15 @@ void randfill(double *a, const int dim){
         }
     }
 
+
+void printmat(double *a, const int dim){
+    printf("\n ");    
+    for(int i=0;i<dim;++i){
+        printf("| ");
+        for(int j=0;j<dim;j++){
+            printf("%lf ",a[i*dim+j]);
+            }
+        printf("|\n ");
+        }
+    printf("\n ");
+    }

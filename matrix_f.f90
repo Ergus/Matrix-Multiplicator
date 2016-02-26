@@ -1,33 +1,19 @@
 
 
-SUBROUTINE matmult(a,b,c,dim)
+SUBROUTINE matmult5(a,b,c,dim)
   implicit none
   INTEGER dim
   DOUBLE PRECISION a(dim,dim),b(dim,dim),c(dim,dim)
   INTEGER i,j,k
-  DOUBLE PRECISION temp, temp2
-  DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:) :: buff
+  DOUBLE PRECISION temp
 
-  ALLOCATE(buff(dim))
-
-  DO i=1,dim
-     temp=0.0
-     DO k=1,dim
-        temp2 = b(i,k)
-        buff(k) = temp2
-        temp=temp+(a(k,1)*temp2)
-     END DO
-     c(i,1)=temp
-     
-     DO j=2,dim
-        temp=0.0
-        DO k=1,dim
-           temp=temp+(a(k,j)*buff(k))
+  DO k = 1,dim
+     DO j = 1,dim
+        temp = a(j,k)
+        DO i = 1,dim
+           c(i,k) = c(i,k) + temp*b(i,j)
         END DO
-        c(i,j)=temp
      END DO
   END DO
 
-  DEALLOCATE(buff)  
-
-END SUBROUTINE matmult
+END SUBROUTINE matmult5

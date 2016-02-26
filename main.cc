@@ -16,8 +16,6 @@ double mtime(){	  //Time measurer
     return sec;
     }
 
-extern "C" void matmult_(double *,double* ,double*,int* );
-
 int main(int argc, char** argv){
     double *a, *b, *c1, *c2, *c3, *c4, *c5;  // Arrays
     double t1,t2;             // Time variables
@@ -29,16 +27,17 @@ int main(int argc, char** argv){
     
     for(int i=1;i<argc;i++){
         const int dim=atoi(argv[i]);
-        const int size=dim*dim*sizeof(double);
+        const int size=dim*dim;
 
         // Allocate the memory for arrays
-        a=(double*)malloc(size);
-        b=(double*)malloc(size);
-        c1=(double*)malloc(size);
-        c2=(double*)malloc(size);
-        c3=(double*)malloc(size);
-        c4=(double*)malloc(size);
-        c5=(double*)malloc(size);
+        a=(double*)malloc(size*sizeof(double));
+        b=(double*)malloc(size*sizeof(double));
+        
+        c1=(double*)calloc(size,sizeof(double));
+        c2=(double*)calloc(size,sizeof(double));
+        c3=(double*)calloc(size,sizeof(double));
+        c4=(double*)calloc(size,sizeof(double));
+        c5=(double*)calloc(size,sizeof(double));
 
         // Fill the matrices with random numbes
         randfill(a,dim);
@@ -48,43 +47,43 @@ int main(int argc, char** argv){
         t1=mtime();
         matmult1(a,b,c1,dim);
         t2=mtime();
-        printf("simple dim: %4d time: %lf\n",dim,t2-t1);
+        printf("simple\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
         // Multiply with buffered algorithm
         t1=mtime();
         matmult2(a,b,c2,dim);
         t2=mtime();
-        printf("buffer dim: %4d time: %lf\n",dim,t2-t1);
+        printf("buffer\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
         // Multiply with blas
         t1=mtime();
         matmult3(a,b,c3,dim);
         t2=mtime();
-        printf("c_blas dim: %4d time: %lf\n",dim,t2-t1);
+        printf("c_blas\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
         t1=mtime();
         matmult4(a,b,c4,dim);
         t2=mtime();
-        printf("blas_ dim: %4d time: %lf\n",dim,t2-t1);
+        printf("blas_\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
         t1=mtime();
         int ldim=dim;
-        matmult_(a,b,c5,&ldim);
+        matmult5_(a,b,c5,&ldim);
         t2=mtime();
-        printf("fort dim: %4d time: %lf\n",dim,t2-t1);                 
+        printf("fort\t dim: %4d\t time: %lf\n",dim,t2-t1);                 
 
         // Check that both results match
         bool equal=compare(c1,c2,dim);        
-        printf("buffer %s\n",(equal?"match":"error"));
+        printf("buffer\t %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c3,dim);        
-        printf("c_blas %s\n",(equal?"match":"error"));
+        printf("c_blas\t %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c4,dim);        
-        printf("blas_ %s\n",(equal?"match":"error"));
+        printf("blas_\t %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c5,dim);        
-        printf("fort %s\n",(equal?"match":"error")); 
+        printf("fort\t %s\n",(equal?"match":"error")); 
 
         // Deallocate memory
         free(a);
@@ -93,7 +92,7 @@ int main(int argc, char** argv){
         free(c2);
         free(c3);
         free(c4);
-        free(c5);        
+        free(c5);
         }
     
     return 0;
