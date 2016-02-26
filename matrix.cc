@@ -23,7 +23,9 @@ void matmult1(double *a,double *b,double *c,const int dim){
         }
     }
 
-void matmult2(double *a,double *b,double *c,const int dim){
+void matmult2(double* __restrict__ a,
+              double* __restrict__ b,
+              double* __restrict__ c,const int dim){
     
     double* tmp=(double*)malloc(sizeof(double)*dim);
     for(int j=0;j<dim;++j){
@@ -53,11 +55,29 @@ void matmult3(double *a,double *b,double *c, const int dim){
                 dim, dim, dim, 1.0, a, dim, b, dim, 1.0, c, dim);
     }
 
+void matmult4(double *a,double *b,double *c, const int dim){
+
+    char TransA[]={'N'};
+    char TransB[]={'N'};
+        
+    int M=dim; int N=dim; int K=dim;
+    int LDA=dim; int LDB=dim; int LDC=dim;
+    double Alpha=1.0; double Betha=1.0;
+        
+    dgemm_(TransA, TransB,
+           &M, &N, &K,
+           &Alpha, b, &LDA,
+           a, &LDB,
+           &Betha, c, &LDC);    
+    
+    }
+
 
 bool compare(double *a, double *b, const int dim){
     const int size=dim*dim;
     for(int i=0;i<size;i++){
         if(a[i]!=b[i]) return false;
+            
         }
     return true;
     }

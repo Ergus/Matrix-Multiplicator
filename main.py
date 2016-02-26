@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import numpy as np
 import ctypes as C
@@ -26,10 +26,12 @@ lib.matmult3.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),
                     np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                     C.c_int]
 
-lib.compare.restype=C.c_bool
-lib.compare.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                       np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                       C.c_int]
+lib.matmult4.restype=None
+lib.matmult4.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                    np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                    np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                    C.c_int]
+
                      
 def matmult0(a,b,c,dim):
     for i in range(dim):
@@ -52,33 +54,40 @@ for dim in sys.argv[1:]:
     c2=np.zeros((idim,idim))
     c3=np.zeros((idim,idim))
     c4=np.zeros((idim,idim))
+    c5=np.zeros((idim,idim))
 
     start = time.time()
     matmult0(a,b,c0,idim)
     end = time.time()
-    print("mult0 dim: %d t: %f" % (idim,end-start))
+    print("loop dim: %d t: %f" % (idim,end-start))
     
     start = time.time()
     lib.matmult1(a,b,c1,idim)
     end = time.time()
-    print("mult1 dim: %d t: %f" % (idim,end-start))
+    print("simple dim: %d t: %f" % (idim,end-start))
 
     start = time.time()
     lib.matmult2(a,b,c2,idim)
     end = time.time()
-    print("mult2 dim: %d t: %f" % (idim,end-start))
+    print("buffer dim: %d t: %f" % (idim,end-start))
 
     start = time.time()
     lib.matmult3(a,b,c3,idim)
     end = time.time()
-    print("mult3 dim: %d t: %f" % (idim,end-start))
+    print("c_blas dim: %d t: %f" % (idim,end-start))
 
     start = time.time()
-    c4=np.dot(a,b)
+    lib.matmult4(a,b,c4,idim)
     end = time.time()
-    print("mult4 dim: %d t: %f" % (idim,end-start))    
+    print("blas_ dim: %d t: %f" % (idim,end-start))    
+
+    start = time.time()
+    c5=np.dot(a,b)
+    end = time.time()
+    print("numpy dim: %d t: %f" % (idim,end-start))
     
     print((c0==c1).all())
     print((c0==c2).all())
     print((c0==c3).all())
     print((c0==c4).all())
+    print((c0==c5).all())

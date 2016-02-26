@@ -1,14 +1,14 @@
 # Compiler
 CC:= gcc
 CFL:= -O3
-LIBS:=-lgslcblas
+LIBS:=-L. -lgslcblas -llapack -lblas
 
 # Produced files
 all: main.x libmatrix.so
 
 # Compile the application executable
 main.x: main.cc libmatrix.so
-	$(CC) $(CFL) -L. $< -o $@ $(LIBS) -lmatrix -Wl,-rpath,${PWD}
+	$(CC) $(CFL) $< -o $@ $(LIBS) -lmatrix -Wl,-rpath,${PWD}
 
 # Compile the shared library
 libmatrix.so: matrix.o

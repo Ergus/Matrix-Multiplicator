@@ -17,7 +17,7 @@ double mtime(){	  //Time measurer
     }
 
 int main(int argc, char** argv){
-    double *a, *b, *c1, *c2, *c3;  // Arrays
+    double *a, *b, *c1, *c2, *c3, *c4;  // Arrays
     double t1,t2;             // Time variables
 
     if(argc==1){
@@ -35,40 +35,44 @@ int main(int argc, char** argv){
         c1=(double*)malloc(size);
         c2=(double*)malloc(size);
         c3=(double*)malloc(size);
+        c4=(double*)malloc(size);
 
         // Fill the matrices with random numbes
         randfill(a,dim);
         randfill(b,dim);
 
-        #ifdef DEBUG
-        printmat(a,dim);
-        printmat(b,dim);
-        #endif
-        
         // Multiply using the normal algorithm
         t1=mtime();
         matmult1(a,b,c1,dim);
         t2=mtime();
-        printf("mult1 dim: %4d time: %lf\n",dim,t2-t1);
+        printf("simple dim: %4d time: %lf\n",dim,t2-t1);
 
         // Multiply with buffered algorithm
         t1=mtime();
         matmult2(a,b,c2,dim);
         t2=mtime();
-        printf("mult2 dim: %4d time: %lf\n",dim,t2-t1);
+        printf("buffer dim: %4d time: %lf\n",dim,t2-t1);
 
         // Multiply with blas
         t1=mtime();
         matmult3(a,b,c3,dim);
         t2=mtime();
-        printf("mult2 dim: %4d time: %lf\n",dim,t2-t1);        
+        printf("c_blas dim: %4d time: %lf\n",dim,t2-t1);
+
+        t1=mtime();
+        matmult4(a,b,c4,dim);
+        t2=mtime();
+        printf("blas_ dim: %4d time: %lf\n",dim,t2-t1);         
 
         // Check that both results match
         bool equal=compare(c1,c2,dim);        
-        printf("Buff %s\n",(equal?"Iguales":"Desiguales"));
+        printf("buffer %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c3,dim);        
-        printf("Blas %s\n",(equal?"Iguales":"Desiguales"));
+        printf("c_blas %s\n",(equal?"match":"error"));
+
+        equal=compare(c1,c4,dim);        
+        printf("blas_ %s\n",(equal?"match":"error"));        
 
         // Deallocate memory
         free(a);
@@ -76,6 +80,7 @@ int main(int argc, char** argv){
         free(c1);
         free(c2);
         free(c3);
+        free(c4);
         }
     
     return 0;

@@ -11,15 +11,18 @@
 extern "C"{
 #endif //__cplusplus
 
-    /*    extern void dgemm_ (char*, char*,
-                        int*, int*, int*,
-                        double*, double*, int*,
-                                 double*, int*,
-                                 double*, double*, int*);     //*/
-
+    void dgemm_(char*,char*,
+                int*,int*,int*,
+                double*,double*,int*,
+                        double*,int*,
+                double*,double*,int*);
+    
     void matmult1(double *a,double *b,double *c,const int dim);
     void matmult2(double *a,double *b,double *c,const int dim);
     void matmult3(double *a,double *b,double *c,const int dim);
+    void matmult4(double *a,double *b,double *c,const int dim);
+
+    
     
     bool compare(double *a, double *b, const int dim);
 
