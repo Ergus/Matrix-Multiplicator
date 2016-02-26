@@ -15,7 +15,7 @@ main.x: main.cc libmatrix.so
 libmatrix.so: matrix_f.o matrix.o 
 	$(CC) $(CFL) -shared $^ -o $@ $(LIBS)
 
-# Compile the .o object from f90 and cc
+# Compile the .o object from F90 and C
 %.o: %.cc
 	$(CC) $(CFL) -fPIC -c $< -o $@
 
@@ -28,6 +28,7 @@ libmatrix.so: matrix_f.o matrix.o
 clean:
 	rm -rf *.x *.so *.o
 
+# define a make test command
 test: main.x main.py
 	@echo -e "\n====== Run C main ====="
 	./$(word 1,$^) 100
