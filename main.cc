@@ -16,8 +16,10 @@ double mtime(){	  //Time measurer
     return sec;
     }
 
+extern "C" void matmult_(double *,double* ,double*,int* );
+
 int main(int argc, char** argv){
-    double *a, *b, *c1, *c2, *c3, *c4;  // Arrays
+    double *a, *b, *c1, *c2, *c3, *c4, *c5;  // Arrays
     double t1,t2;             // Time variables
 
     if(argc==1){
@@ -36,6 +38,7 @@ int main(int argc, char** argv){
         c2=(double*)malloc(size);
         c3=(double*)malloc(size);
         c4=(double*)malloc(size);
+        c5=(double*)malloc(size);
 
         // Fill the matrices with random numbes
         randfill(a,dim);
@@ -62,7 +65,13 @@ int main(int argc, char** argv){
         t1=mtime();
         matmult4(a,b,c4,dim);
         t2=mtime();
-        printf("blas_ dim: %4d time: %lf\n",dim,t2-t1);         
+        printf("blas_ dim: %4d time: %lf\n",dim,t2-t1);
+
+        t1=mtime();
+        int ldim=dim;
+        matmult_(a,b,c5,&ldim);
+        t2=mtime();
+        printf("fort dim: %4d time: %lf\n",dim,t2-t1);                 
 
         // Check that both results match
         bool equal=compare(c1,c2,dim);        
@@ -72,7 +81,10 @@ int main(int argc, char** argv){
         printf("c_blas %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c4,dim);        
-        printf("blas_ %s\n",(equal?"match":"error"));        
+        printf("blas_ %s\n",(equal?"match":"error"));
+
+        equal=compare(c1,c5,dim);        
+        printf("fort %s\n",(equal?"match":"error")); 
 
         // Deallocate memory
         free(a);
@@ -81,6 +93,7 @@ int main(int argc, char** argv){
         free(c2);
         free(c3);
         free(c4);
+        free(c5);        
         }
     
     return 0;
