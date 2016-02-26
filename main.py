@@ -8,32 +8,20 @@ import time
 # Open the C Library
 lib=C.CDLL("./libmatrix.so")
 
-lib.matmult1.restype=None
-lib.matmult1.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+lib.mult_cached.restype=None
+lib.mult_cached.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        C.c_int]
 
-lib.matmult2.restype=None
-lib.matmult2.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+lib.mult_blas.restype=None
+lib.mult_blas.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        C.c_int]
 
-lib.matmult3.restype=None
-lib.matmult3.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                    np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                    np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                    C.c_int]
-
-lib.matmult4.restype=None
-lib.matmult4.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                       np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                       np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
-                       C.c_int]
-
-lib.matmult5_.restype=None
-lib.matmult5_.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+lib.mult_fort_.restype=None
+lib.mult_fort_.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                         np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                         np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                         C.POINTER(C.c_int)]
@@ -62,8 +50,6 @@ for dim in sys.argv[1:]:
     c2=np.zeros((idim,idim))
     c3=np.zeros((idim,idim))
     c4=np.zeros((idim,idim))
-    c5=np.zeros((idim,idim))
-    c6=np.zeros((idim,idim))
 
     start = time.time()
     matmult0(a,b,c0,idim)
@@ -71,32 +57,22 @@ for dim in sys.argv[1:]:
     print("loop\t dim: %d\t t: %f" % (idim,end-start))
     
     start = time.time()
-    lib.matmult1(a,b,c1,idim)
+    lib.mult_cached(a,b,c1,idim)
     end = time.time()
     print("simple\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
 
     start = time.time()
-    lib.matmult2(a,b,c2,idim)
+    lib.mult_blas(a,b,c2,idim)
     end = time.time()
-    print("buffer\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
+    print("blas\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
 
     start = time.time()
-    lib.matmult3(a,b,c3,idim)
-    end = time.time()
-    print("c_blas\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
-
-    start = time.time()
-    lib.matmult4(a,b,c4,idim)
-    end = time.time()
-    print("blas_\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
-
-    start = time.time()
-    lib.matmult5_(a,b,c5,C.byref(C.c_int(idim)))
+    lib.mult_fort_(a,b,c3,C.byref(C.c_int(idim)))
     end = time.time()
     print("fort\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
 
     start = time.time()
-    c6=np.dot(a,b)
+    c4=np.dot(a,b)
     end = time.time()
     print("numpy\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
     

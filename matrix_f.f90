@@ -1,9 +1,10 @@
 
 
-SUBROUTINE matmult5(a,b,c,dim)
+SUBROUTINE mult_fort(a,b,c,dim)
   implicit none
-  INTEGER dim
-  DOUBLE PRECISION a(dim,dim),b(dim,dim),c(dim,dim)
+  INTEGER, INTENT(in) :: dim
+  DOUBLE PRECISION, INTENT(IN) :: a(dim,dim),b(dim,dim)
+  DOUBLE PRECISION, INTENT(OUT) :: c(dim,dim)
   INTEGER i,j,k
   DOUBLE PRECISION temp
 
@@ -16,4 +17,5 @@ SUBROUTINE matmult5(a,b,c,dim)
      END DO
   END DO
 
-END SUBROUTINE matmult5
+END SUBROUTINE mult_fort
+
