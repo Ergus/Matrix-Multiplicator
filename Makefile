@@ -2,25 +2,28 @@
 CC:= gcc
 FC:= gfortran
 CFL:= -O3
-LIBS:=-L. -lblas
+LIBS:=-L. -lblas -fopenmp -lpthread
 
 # Produced files
 all: main.x libmatrix.so
 
 # Compile the application executable
-main.x: main.cc libmatrix.so
-	$(CC) $(CFL) $< -o $@ $(LIBS) -lmatrix -Wl,-rpath,.
+main.x: main.cc libmatrix.so matrix_asm.o
+	$(CC) $(CFL) $< matrix_asm.o -o $@ $(LIBS) -lmatrix -Wl,-rpath,.
 
 # Compile the shared library
 libmatrix.so: matrix_f.o matrix.o 
-	$(CC) $(CFL) -shared $^ -o $@ $(LIBS)
+	$(CC) $(CFL) -shared $^ -o $@ $(LIBS) 
 
 # Compile the .o object from F90 and C
 %.o: %.cc
-	$(CC) $(CFL) -fPIC -c $< -o $@
+	$(CC) $(CFL) -fPIC -c $< -o $@ -fopenmp
 
 %.o: %.f90
 	$(FC) $(CFL) -fPIC -c $< -o $@
+
+%.o: %.asm
+	nasm -f elf64 $< -o $@
 
 .PHONY: clean test
 

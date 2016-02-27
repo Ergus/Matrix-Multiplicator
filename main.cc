@@ -36,6 +36,8 @@ int main(int argc, char** argv){
         c1=(double*)calloc(size,sizeof(double));
         c2=(double*)calloc(size,sizeof(double));
         c3=(double*)calloc(size,sizeof(double));
+        c4=(double*)calloc(size,sizeof(double));
+        c5=(double*)calloc(size,sizeof(double));
 
         // Fill the matrices with random numbes
         randfill(a,dim);
@@ -60,12 +62,30 @@ int main(int argc, char** argv){
         t2=mtime();
         printf("fortran\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
+        // Multiply with buffered algorithm
+        t1=mtime();
+        mult_parallel(a,b,c4,dim);
+        t2=mtime();
+        printf("omp\t dim: %4d\t time: %lf\n",dim,t2-t1);
+
+        // Multiply with buffered algorithm
+        t1=mtime();
+        mult_asm(a,b,c5,dim);
+        t2=mtime();
+        printf("asm\t dim: %4d\t time: %lf\n",dim,t2-t1);        
+
         // Check that both results match
         bool equal=compare(c1,c2,dim);        
         printf("blas\t %s\n",(equal?"match":"error"));
 
         equal=compare(c1,c3,dim);        
         printf("fortran\t %s\n",(equal?"match":"error"));
+
+        equal=compare(c1,c4,dim);        
+        printf("parallel\t %s\n",(equal?"match":"error"));
+
+        equal=compare(c1,c5,dim);
+        printf("asm\t %s\n",(equal?"match":"error"));
 
 
         // Deallocate memory
@@ -74,6 +94,8 @@ int main(int argc, char** argv){
         free(c1);
         free(c2);
         free(c3);
+        free(c4);
+        free(c5);
         }
     
     return 0;

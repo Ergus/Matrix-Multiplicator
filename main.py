@@ -14,6 +14,12 @@ lib.mult_cached.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        C.c_int]
 
+lib.mult_parallel.restype=None
+lib.mult_parallel.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                       np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                       np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                       C.c_int]
+
 lib.mult_blas.restype=None
 lib.mult_blas.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
@@ -50,6 +56,7 @@ for dim in sys.argv[1:]:
     c2=np.zeros((idim,idim))
     c3=np.zeros((idim,idim))
     c4=np.zeros((idim,idim))
+    c5=np.zeros((idim,idim))
 
     start = time.time()
     matmult0(a,b,c0,idim)
@@ -64,16 +71,19 @@ for dim in sys.argv[1:]:
     start = time.time()
     lib.mult_blas(a,b,c2,idim)
     end = time.time()
-    print("blas\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
+    print("blas\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c2).all()))
 
     start = time.time()
     lib.mult_fort_(a,b,c3,C.byref(C.c_int(idim)))
     end = time.time()
-    print("fort\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
+    print("fort\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c3).all()))
 
     start = time.time()
     c4=np.dot(a,b)
     end = time.time()
-    print("numpy\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c1).all()))
+    print("numpy\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c4).all()))
     
-
+    start = time.time()
+    lib.mult_parallel(a,b,c5,idim)
+    end = time.time()
+    print("parallel\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c5).all()))

@@ -4,7 +4,24 @@ void mult_cached(double* __restrict__ a,
                  double* __restrict__ b,
                  double* __restrict__ c,
                  const int dim){
-    
+
+    const int size=dim*dim;
+    for(int idim=0;idim<size;idim+=dim){
+        for(int j=0, jdim=0; j<dim ;j++, jdim+=dim){            
+            const double temp=a[idim+j];
+            for(int k=0;k<dim;k++){
+                c[idim+k]+=(temp*b[jdim+k]);
+                }
+            }
+        }
+    }
+
+void mult_parallel(double* __restrict__ a,
+                   double* __restrict__ b,
+                   double* __restrict__ c,
+                   const int dim){
+
+    #pragma omp parallel for
     for(int i=0;i<dim;++i){
         const int idim=i*dim;
         for(int j=0;j<dim;j++){
