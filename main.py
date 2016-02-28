@@ -32,6 +32,12 @@ lib.mult_fort_.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"
                         np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
                         C.POINTER(C.c_int)]
 
+lib.mult_asm.restype=None
+lib.mult_asm.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                        np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
+                        C.c_int]
+
                      
 def matmult0(a,b,c,dim):
     for i in range(dim):
@@ -57,6 +63,7 @@ for dim in sys.argv[1:]:
     c3=np.zeros((idim,idim))
     c4=np.zeros((idim,idim))
     c5=np.zeros((idim,idim))
+    c6=np.zeros((idim,idim))
 
     start = time.time()
     matmult0(a,b,c0,idim)
@@ -82,8 +89,13 @@ for dim in sys.argv[1:]:
     c4=np.dot(a,b)
     end = time.time()
     print("numpy\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c4).all()))
+
+    start = time.time()
+    lib.mult_asm(a,b,c5,idim)
+    end = time.time()
+    print("asm\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c5).all()))    
     
     start = time.time()
-    lib.mult_parallel(a,b,c5,idim)
+    lib.mult_parallel(a,b,c6,idim)
     end = time.time()
-    print("parallel\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c5).all()))
+    print("openMP\t dim: %d\t t: %f match: %r" % (idim,end-start,(c0==c6).all()))

@@ -51,12 +51,12 @@ void mult_blas(double *a,double *b,double *c, const int dim){
 
 
 // Other useful functions
-bool compare(double *a, double *b, const int dim){
+const char* compare(double *a, double *b, const int dim){
     const int size=dim*dim;
     for(int i=0;i<size;i++){
-        if(a[i]!=b[i]) return false;            
+        if(a[i]!=b[i]) return "Error";  
         }
-    return true;
+    return "OK";
     }
 
 void randfill(double *a, const int dim){

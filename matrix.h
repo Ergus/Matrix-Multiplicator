@@ -39,7 +39,7 @@ extern "C"{
     void mult_asm(double* , double* , double* , int);
 
     // Other useful functions
-    bool compare(double *a, double *b, const int dim);
+    const char* compare(double *a, double *b, const int dim);
     void randfill(double *a, const int dim);
     void printmat(double *a, const int dim);
         
