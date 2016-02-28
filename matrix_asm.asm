@@ -1,5 +1,5 @@
-global mult_asm
-
+global mult_asm:function
+	
 section .text
 
 mult_asm:
@@ -19,60 +19,57 @@ mult_asm:
 	push r15
 
     ; iteraciones
-    mov  r8, rcx                ; auxiliar r8=dim
-    xor  r11,  r11              ; idim=0
-    imul r8, rcx	        ; auxiliar r8=dim*dim
+    mov  r8, rcx                       ; auxiliar r8=dim
+    xor  r11,  r11                     ; idim=0
+    imul r8, rcx	               ; auxiliar r8=dim*dim
 	
 .loopi:
     
-    xor   r9,  r9               ; j=0 al llamar al loop
-    xor  r12, r12  		; jdim=0
+    mov   r9, rcx                      ; j=0 al llamar al loop
+    xor  r12, r12  		       ; jdim=0
     .loopj:
-	movsd xmm0, [rdi]
-	punpcklqdq xmm0, xmm0   ; copy xmm15 dos veces en el registro 15 (temp)
+	vbroadcastsd ymm0, [rdi]        ; copio el valor de a
 	
-	xor r10, r10            ; k=0 al llamar al loop
-	lea r14, [rsi+8*r12]    ; it(b)=b[jdim]
-	lea r15, [rdx+8*r11]    ; it(c)=c[idim]
+	mov r10, rcx                   ; k=dim al llamar al loop
+	lea r14, [rsi+8*r12]           ; it(b)=b[jdim]
+	lea r15, [rdx+8*r11]           ; it(c)=c[idim]
         .loopk:
 	
-            movapd xmm1, [r14]  ; copio 2 elementos de b a xmm1
-	    lea r14, [r14+16]    ; it(b)+=2
+;           vmovupd ymm1, [r14]        ; copio 4 elementos de b a ymm1
+;           vmulpd ymm1, ymm0          ; multiplico temp*b
+	
+	    vmulpd ymm1, ymm0, [r14]   ; multiplico  temp*b y lo pongo en ymm1
 
-	    mulpd xmm1, xmm0    ; multiplico los valores por temp
+	    lea r14, [r14+32]          ; it(b)+=(4*sizeof(doubles))
+	
+            vaddpd ymm1, [r15]         ; sumo 4 elementos de c a ymm1
 
-            movapd xmm2, [r15]  ; copio 2 elementos de c a xmm2
-	    addpd xmm2, xmm1    ; c+=tmp*b
-	    movapd [r15], xmm2  ; move back to register
-
-	    lea r15, [r15+16]
+	    vmovupd [r15], ymm1        ; move back to register
+	
+	    lea r15, [r15+32]	       ; Incremento el contador
 	    
-	    add r10, 2
-	    cmp r10, rcx
-.loopkout2:
+	    sub r10, 4
 	    jne .loopk
-.loopkout1:
-        inc  r9                 ; j++
+
 	add r12, rcx            ; jdim+=dim
 	lea rdi, [rdi+8]        ; muevo it(a)++
-	cmp r9, rcx             ; j==dim
-	jne .loopj             ; else goto loop
-.loopjout:
+        dec r9                  ; j++	
+	jne .loopj              ; else goto loop
+
     add r11, rcx                ; i=i+dim
     cmp r11, r8                 ; i==dim*dim
     jne .loopi	                ; else goto .loop_i
-loopiout:
 
-	; Recover regiters from stack
-	pop r15
-	pop r14
-	pop r13
-	pop r12	
+; Recover regiters from stack
+pop r15
+pop r14
+pop r13
+pop r12	
 
-	; Restauro el stack
-	pop rbp
+; Restauro el stack
+pop rbp
 
-	ret
+ret
 
 
 	

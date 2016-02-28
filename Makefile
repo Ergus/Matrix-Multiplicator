@@ -8,11 +8,11 @@ LIBS:=-L. -lblas -fopenmp -lpthread
 all: main.x libmatrix.so
 
 # Compile the application executable
-main.x: main.cc libmatrix.so matrix_asm.o
-	$(CC) $(CFL) $< matrix_asm.o -o $@ $(LIBS) -lmatrix -Wl,-rpath,.
+main.x: main.cc libmatrix.so 
+	$(CC) $(CFL) $< -o $@ $(LIBS) -lmatrix -Wl,-rpath,.
 
 # Compile the shared library
-libmatrix.so: matrix_f.o matrix.o 
+libmatrix.so: matrix_f.o matrix.o matrix_asm.o
 	$(CC) $(CFL) -shared $^ -o $@ $(LIBS) 
 
 # Compile the .o object from F90 and C

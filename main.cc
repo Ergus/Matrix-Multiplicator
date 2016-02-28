@@ -64,15 +64,15 @@ int main(int argc, char** argv){
 
         // Multiply with buffered algorithm
         t1=mtime();
-        mult_parallel(a,b,c4,dim);
-        t2=mtime();
-        printf("omp\t dim: %4d\t time: %lf\n",dim,t2-t1);
-
-        // Multiply with buffered algorithm
-        t1=mtime();
         mult_asm(a,b,c5,dim);
         t2=mtime();
         printf("asm\t dim: %4d\t time: %lf\n",dim,t2-t1);        
+        
+        // Multiply with buffered algorithm
+        t1=mtime();
+        mult_parallel(a,b,c4,dim);
+        t2=mtime();
+        printf("omp\t dim: %4d\t time: %lf\n",dim,t2-t1);
 
         // Check that both results match
         bool equal=compare(c1,c2,dim);        
