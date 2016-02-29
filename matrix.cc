@@ -7,10 +7,10 @@ void mult_cached(double* __restrict__ a,
 
     const int size=dim*dim;
     for(int idim=0;idim<size;idim+=dim){
-        for(int j=0, jdim=0; j<dim ;j++, jdim+=dim){            
+        for(int j=0, jdim=0; j<dim ;j++, jdim+=dim){
             const double temp=a[idim+j];
             for(int k=0;k<dim;k++){
-                c[idim+k]+=(temp*b[jdim+k]);
+                c[idim+k]+= (temp* b[jdim+k]);
                 }
             }
         }
