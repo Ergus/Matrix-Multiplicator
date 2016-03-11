@@ -1,5 +1,21 @@
 #include "matrix.h"
 
+void mult_uncached(double* a,
+                   double* b,
+                   double* c,
+                   const int dim){
+
+    for(int i=0, idim=0; i<dim; i++, idim+=dim){
+        for(int j=0; j<dim; j++){
+            double tmp=0.0;
+            for(int k=0;k<dim;k++){
+                tmp+= (a[idim+k]*b[k*dim+j]);
+                }
+            c[idim+j]=tmp;
+            }
+        }
+    }
+
 void mult_cached(double* __restrict__ a,
                  double* __restrict__ b,
                  double* __restrict__ c,

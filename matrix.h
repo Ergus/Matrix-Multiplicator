@@ -19,6 +19,11 @@ extern "C"{
                         double*,int*,
                 double*,double*,int*);
 
+    void mult_uncached(double* a,
+                       double* b,
+                       double* c,
+                       const int dim);
+    
     // Simple loop multiplication
     void mult_cached(double* __restrict__ a,
                      double* __restrict__ b,
