@@ -1,3 +1,10 @@
+#..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+#
+# Matrix-Matrix multiplication Makefile example
+# Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
+#
+#..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+
 # Compiler
 CC:= gcc
 FC:= gfortran

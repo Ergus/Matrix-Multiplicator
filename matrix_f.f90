@@ -1,4 +1,9 @@
-
+!..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+!
+! Matrix-Matrix multiplication using FORTRAN
+! Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
+!
+!..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
 
 SUBROUTINE mult_fort(a,b,c,dim)
   implicit none

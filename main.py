@@ -1,5 +1,13 @@
 #!/usr/bin/env python2
 
+#..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+#
+# Main code in python the simple Matrix-Matrix multiplication with time measurer.
+# using CTypes.
+# Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
+#
+#..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+
 import numpy as np
 import ctypes as C
 import sys

@@ -1,10 +1,14 @@
+;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+;
+; Matrix-Matrix multiplication using nasm
+; Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
+;	
+;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+
+	
 global mult_asm:function
 	
 section .text
-
-%macro multip 2
-
-%endmacro
 
 %macro split 0
 	vmovupd xmm0, [rdi]

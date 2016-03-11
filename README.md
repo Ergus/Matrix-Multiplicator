@@ -1,5 +1,7 @@
 # README
 
+Simple code examples developed by **MSc. Jimmy Aguilar Mena** to test different square matrix-matrix multiplications.
+
 Simple example code for square matrix multiplication in C, Fortran, Assembler and Python. 
 
 All the functions are compiled in a shared library. Python and C call all the functions included in the shared library. Python 
@@ -17,11 +19,12 @@ To compile, gcc, gfortran and nasm are needed.
 
 | Languaje | Dimension |   Time   |
 |----------|:---------:|:--------:|
-| cached   |  200  	   | 0.003969 |
-| blas     |  200	   | 0.005722 |
-| fortran  |  200	   | 0.003675 |
-| asm	   |  200	   | 0.002260 |
-| omp	   |  200	   | 0.003199 |
+| normal   | 1000 	   | 1.928310 |
+| cached   | 1000	   | 0.558002 |
+| blas	   | 1000	   | 0.765381 |
+| fortran  | 1000	   | 0.589957 |
+| asm	   | 1000	   | 0.484899 |
+| omp	   | 1000	   | 0.263075 |
 
 
 ./main.py 200  

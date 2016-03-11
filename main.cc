@@ -1,8 +1,13 @@
+//..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+//
+// Main code in C for the simple Matrix-Matrix multiplication with time measurer.
+// Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
+//
+//..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include <time.h>
-//#include <ctype.h>
 #include <sys/types.h>
 #include <sys/time.h>
 
