@@ -12,19 +12,30 @@ CFL:= -O3
 LIBS:=-L. -lblas -fopenmp -lpthread
 
 # Produced files
-all: main.x libmatrix.so
+all: main_gcc.x main_clang.x libmatrix_gcc.so libmatrix_clang.so
 
 # Compile the application executable
-main.x: main.cc libmatrix.so 
-	$(CC) $(CFL) $< -o $@ $(LIBS) -lmatrix -Wl,-rpath,.
+main_gcc.x: main.cc libmatrix_gcc.so 
+	$(CC) $(CFL) $< -o $@ $(LIBS) -lmatrix_gcc -Wl,-rpath,.
+
+# Compile the application executable
+main_clang.x: main.cc libmatrix_clang.so 
+	clang $(CFL) $< -o $@ $(LIBS) -lmatrix_clang -Wl,-rpath,.
 
 # Compile the shared library
-libmatrix.so: matrix_f.o matrix.o matrix_asm.o
-	$(CC) $(CFL) -shared $^ -o $@ $(LIBS) 
+libmatrix_gcc.so: matrix_gcc.o matrix_f.o matrix_asm.o
+	$(CC) $(CFL) -shared $^ -o $@ $(LIBS)
+
+# Compile the llvm shared library
+libmatrix_clang.so: matrix_clang.o matrix_f.o matrix_asm.o
+	clang $(CFL) -shared $^ -o $@ $(LIBS) 
 
 # Compile the .o object from F90 and C
-%.o: %.cc
+matrix_gcc.o: matrix.cc
 	$(CC) $(CFL) -fPIC -c $< -o $@ -fopenmp
+
+matrix_clang.o: matrix.cc
+	clang $(CFL) -fPIC -c $< -o $@ -fopenmp
 
 %.o: %.f90
 	$(FC) $(CFL) -fPIC -c $< -o $@
@@ -39,8 +50,10 @@ clean:
 	rm -rf *.x *.so *.o
 
 # define a make test command
-test: main.x main.py
-	@echo -e "\n====== Run C main ====="
+test: main_gcc.x main_clang.x main.py
+	@echo -e "\n====== Run GCC main ====="
 	./$(word 1,$^) 100
-	@echo -e "\n==== Run Python main =="
+	@echo -e "\n====== Run CLANG main ====="
 	./$(word 2,$^) 100
+	@echo -e "\n==== Run Python main =="
+	./$(word 3,$^) 100

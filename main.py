@@ -14,7 +14,7 @@ import sys
 import time
 
 # Open the C Library
-lib=C.CDLL("./libmatrix.so")
+lib=C.CDLL("./libmatrix_gcc.so")
 
 lib.mult_cached.restype=None
 lib.mult_cached.argtypes=[np.ctypeslib.ndpointer(C.c_double, flags="C_CONTIGUOUS"),\
