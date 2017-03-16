@@ -15,26 +15,42 @@ The Assembler Implementation have vectorization with ymm 256 bit registers, so t
 
 To compile, gcc, gfortran and nasm are needed.
 
-./main.x 200
+## Run GCC main
 
-| Languaje | Dimension |   Time   |
+./main_gcc.x 1000
+
+| Version  | Dimension |   Time   |
 |----------|:---------:|:--------:|
-| normal   | 1000 	   | 1.928310 |
-| cached   | 1000	   | 0.558002 |
-| blas	   | 1000	   | 0.765381 |
-| fortran  | 1000	   | 0.589957 |
-| asm	   | 1000	   | 0.484899 |
-| omp	   | 1000	   | 0.263075 |
+|normal    | 1000      | 2.264107 |
+|cached    | 1000      | 1.390773 |
+|blas      | 1000      | 2.762676 |
+|fortran   | 1000      | 1.394452 |
+|asm       | 1000      | 0.394383 |
+|omp       | 1000      | 0.460474 |
 
+## Run CLANG main
 
-./main.py 200  
+./main_clang.x 1000
 
-| Languaje | Dimension |   Time   |
+| Version  | Dimension |   Time   |
 |----------|:---------:|:--------:|
-| loop     |   200	   | 4.303328 |
-| simple   |   200	   | 0.003462 |
-| blas     |   200	   | 0.005074 |
-| fort     |   200	   | 0.003687 |
-| numpy    |   200	   | 0.005062 |
-| asm      |   200	   | 0.002292 |
-| openMP   |   200	   | 0.006784 |
+|normal    | 1000      | 2.315583 |
+|cached    | 1000      | 0.522179 |
+|blas      | 1000      | 2.779882 |
+|fortran   | 1000      | 1.401433 |
+|asm       | 1000      | 0.393088 |
+|omp       | 1000      | 0.305081 |
+
+## Run Python main
+
+./main.py 100
+
+| Version  | Dimension |   Time   |
+|----------|:---------:|:--------:|
+|loop      | 100       | 0.495779 |
+|simple    | 100       | 0.000496 |
+|blas      | 100       | 0.000650 |
+|fort      | 100       | 0.000468 |
+|numpy     | 100       | 0.002736 |
+|asm       | 100       | 0.000229 |
+|openMP    | 100       | 0.014398 |

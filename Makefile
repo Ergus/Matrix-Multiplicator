@@ -52,8 +52,8 @@ clean:
 # define a make test command
 test: main_gcc.x main_clang.x main.py
 	@echo -e "\n====== Run GCC main ====="
-	./$(word 1,$^) 100
+	./$(word 1,$^) 1000
 	@echo -e "\n====== Run CLANG main ====="
-	./$(word 2,$^) 100
+	./$(word 2,$^) 1000
 	@echo -e "\n==== Run Python main =="
 	./$(word 3,$^) 100
