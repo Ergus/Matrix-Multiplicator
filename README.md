@@ -21,12 +21,12 @@ To compile, gcc, gfortran and nasm are needed.
 
 | Version  | Dimension |   Time   |
 |----------|:---------:|:--------:|
-|normal    | 1000      | 2.264107 |
-|cached    | 1000      | 1.390773 |
-|blas      | 1000      | 2.762676 |
-|fortran   | 1000      | 1.394452 |
-|asm       | 1000      | 0.394383 |
-|omp       | 1000      | 0.460474 |
+|normal    | 1000      | 2.017361 |
+|cached    | 1000      | 0.584735 |
+|blas      | 1000      | 0.754343 |
+|fortran   | 1000      | 0.586900 |
+|asm       | 1000      | 0.441710 |
+|omp       | 1000      | 0.576689 |
 
 ## Run CLANG main
 
@@ -34,12 +34,12 @@ To compile, gcc, gfortran and nasm are needed.
 
 | Version  | Dimension |   Time   |
 |----------|:---------:|:--------:|
-|normal    | 1000      | 2.315583 |
-|cached    | 1000      | 0.522179 |
-|blas      | 1000      | 2.779882 |
-|fortran   | 1000      | 1.401433 |
-|asm       | 1000      | 0.393088 |
-|omp       | 1000      | 0.305081 |
+|normal    | 1000      | 1.997429 |
+|cached    | 1000      | 0.550460 |
+|blas      | 1000      | 0.752818 |
+|fortran   | 1000      | 0.583280 |
+|asm       | 1000      | 0.441788 |
+|omp       | 1000      | 0.334884 |
 
 ## Run Python main
 
@@ -47,10 +47,11 @@ To compile, gcc, gfortran and nasm are needed.
 
 | Version  | Dimension |   Time   |
 |----------|:---------:|:--------:|
-|loop      | 100       | 0.495779 |
-|simple    | 100       | 0.000496 |
-|blas      | 100       | 0.000650 |
-|fort      | 100       | 0.000468 |
-|numpy     | 100       | 0.002736 |
-|asm       | 100       | 0.000229 |
-|openMP    | 100       | 0.014398 |
+|loop      | 100       | 0.635916 |
+|simple    | 100       | 0.000585 |
+|blas      | 100       | 0.000824 |
+|fort      | 100       | 0.000552 |
+|numpy     | 100       | 0.000834 |
+|asm       | 100       | 0.000217 |
+|openMP    | 100       | 0.017425 |
+
