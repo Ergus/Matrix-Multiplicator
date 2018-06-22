@@ -1,13 +1,27 @@
-;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
-;
-; Matrix-Matrix multiplication using nasm
-; Copyright 2016 Jimmy Aguilar Mena <spacibba@yandex.com>
-;	
-;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+;;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..
+;;
+;; This file is part of the Matrix-Multiplicator distribution Copyright (c) 2016
+;; Jimmy Aguilar Mena.
+;;
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, version 3.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
+;;
+;; Assembler version for the simple Matrix-Matrix multiplication with time
+;; measurer. Copyright 2016 Jimmy Aguilar Mena <kratsbinovish@gmail.com>
+;;
+;;..ooOO00OOoo....ooOO00OOoo....ooOO00OOoo....ooOO00OOoo..*/
 
-	
 global mult_asm:function
-	
+
 section .text
 
 %macro split 0
@@ -17,8 +31,8 @@ section .text
 	vshufpd xmm0, xmm0, 1
 	vbroadcastsd ymm4, xmm0
 %endmacro
-	
-	
+
+
 mult_asm:
 	; RDI Matrix A
 	; RSI Matrix B
@@ -39,32 +53,32 @@ mult_asm:
     mov  r8, rcx                       ; auxiliar r8=dim
     xor  r11,  r11                     ; idim=0
     imul r8, rcx	               ; auxiliar r8=dim*dim
-	
+
 .loopi:
-    
+
     mov   r9, rcx                      ; j=dim al llamar al loop
     xor  r12, r12  		       ; jdim=0
     .loopj:
 	vmovupd ymm0, [rdi]            ; copio el valor de a[idim+j]
-	
+
 	split			       ; macro para hacer el broadcast ymm0 en ymm3,4
-	
+
 	mov r10, rcx                   ; k=dim al llamar al loop
 	lea r14, [rsi+8*r12]           ; it(b)=b[jdim]
 	lea r15, [rdx+8*r11]           ; it(c)=c[idim]
         .loopk:
 
-            vmulpd  ymm1,  ymm3, [r14]         ; multiplico ymm1=temp1*b
+        vmulpd  ymm1,  ymm3, [r14]         ; multiplico ymm1=temp1*b
 	    vmulpd  ymm2,  ymm4, [r14+8*rcx]   ; multiplico ymm2=temp2*b[j+1]
 
 	    vaddpd  ymm1,  [r15]                ; sumo 4 elementos de ymm1+=c
-	    vaddpd  ymm1,  ymm2                 ; sumo 4 elementos de ymm1=+(temp2*b2)	
-	
+	    vaddpd  ymm1,  ymm2                 ; sumo 4 elementos de ymm1=+(temp2*b2)
+
 	    vmovupd [r15], ymm1                 ; move back to c
-	
- 	    add r14, 32                ; it(b)+=(4*sizeof(doubles))	
+
+ 	    add r14, 32                ; it(b)+=(4*sizeof(doubles))
 	    lea r15, [r15+32]	       ; it(c)+=(4*sizeof(doubles))
-	    
+
 	    sub r10, 4          ; k-=4
 	    jne .loopk
 
@@ -81,11 +95,8 @@ mult_asm:
 pop r15
 pop r14
 pop r13
-pop r12	
+pop r12
 ; Restauro el stack
 pop rbp
 
 ret
-
-
-	

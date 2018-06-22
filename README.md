@@ -1,17 +1,22 @@
 # README
 
-Simple code examples developed by **MSc. Jimmy Aguilar Mena** to test different square matrix-matrix multiplications.
+Simple code examples developed to test different squared matrix-matrix
+multiplications.
 
-Simple example code for square matrix multiplication in C, Fortran, Assembler and Python. 
+Simple example code for square matrix multiplication in C, Fortran, Assembler
+and Python.
 
-All the functions are compiled in a shared library. Python and C call all the functions included in the shared library. Python 
-also uses Numpy and a python loop extra function.
+All the functions are compiled in a shared library. Python and C call all the
+functions included in the shared library. Python also uses Numpy and a python
+loop extra function.
 
 The fortran method is called directly using the old Fortran method.
 
-The only external dependencies are blass and numpy. All the codes are optimized based on the original BLAS routine. 
+The only external dependencies are blass and numpy. All the codes are optimized
+based on the original BLAS routine.
 
-The Assembler Implementation have vectorization with ymm 256 bit registers, so the mult_asm code should work only for dim%4==0.
+The Assembler Implementation have vectorization with ymm 256 bit registers, so
+the mult_asm code should work only for dim%4==0.
 
 To compile, gcc, gfortran and nasm are needed.
 
